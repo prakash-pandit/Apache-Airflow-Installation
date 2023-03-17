@@ -1,0 +1,99 @@
+# Install Apache-airflow on Windows without docker
+
+#Apache Airflow is a tool that helps you manage and schedule data pipelines. 
+# According to the documentation, it lets you "programmatically author, schedule, and monitor workflows."
+
+#Prerequisites : This documents assumes that you are familier with using command line and set the environment as stated below.
+
+# Requirements 
+# 1. python - 3.8 or higher 
+# 2. Windows - Windows10 or higher
+# 3. Windows Subsystem for Linux (WSL2) 
+
+#How to install WSL on windows
+# Go to search bar and search for enable windows subsystem for linux
+    # 1. Enable windows Subsystem for Linux - by doing righttick in check box
+    # 2. Open command prompt as an admistration
+    3. wsl --install -d ubuntu
+# Restart the CMD and you will be redirected to the ubuntu instance 
+
+# For any specific linux Distro 
+ wsl --list --online 
+
+
+# you can install any Distro as per Requirements
+wsl --install -d DISTRO-Name
+
+# for update you can run below command
+wsl --update
+
+
+# After That you will have to follow below steps to download airflow environment as well as active it
+# To work with apache airflow - you need to setup the virtual environment and for that you need to install virtualenv package
+
+
+###### Task 1 : virtual environment setup
+
+# Go to root of the terminal
+cd ~
+pip install virtualenv
+virtualenv airflow_env
+
+#if the last command doen't work on same cmd then try by restarting cmd
+# active the environment
+
+source airflow_env/bin/activate
+
+###### Task 2 : Airflow Directory Setup
+# create the folder names airflow and locate it anywhere as  per your convenience mine is at /home/username/airflow
+
+cd ~
+cd /home/your_username
+mkdir airflow
+
+
+# Restart the cmd
+# make the virtual environment active by running below command 
+source airflow_env/bin/activate
+
+# your directory should be pointing towards the airflow 
+cd /home/your_username/airflow
+
+###### Task 3 : Now install apache-airflow
+# INSTALL APACHE AIRFLOW 
+pip install apache-airflow
+
+# Initialize the database
+airflow db init
+
+# create the folder, for scripts to keep, with the name dags
+mkdir dags
+
+ls
+
+# Create airflow user by restarting your cmd or with the same UI 
+# If restarted then use airflow directory with airflow_env activated
+
+# Task 4 : Create a airflow user
+# when airflow is newly installed you will need to create a user , This user you will be used to logic to airflow UI 
+airflow users create\
+--username admin\
+--password admin\
+--firstname admin\
+--lastname admin\
+--email youremailaddress@host.com
+
+# check the created list 
+airflow users list 
+
+# Now run the scheduler with below command 
+airflow scheduler
+
+# Now run the webserver with below command , webserver will have by default port number 8080
+airflow webserver 
+
+# If you want to change the port when default is in use
+airflow webserver --port <port number>
+
+# Login the UI from localhost:8080 by using the user which has created earlier
+# In the UI we can see already created DAG which comes with airflow installation by default
